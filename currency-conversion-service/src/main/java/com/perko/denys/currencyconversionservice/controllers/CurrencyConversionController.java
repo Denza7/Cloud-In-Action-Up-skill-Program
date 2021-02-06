@@ -27,7 +27,7 @@ public class CurrencyConversionController {
 	@Autowired
 	private CurrencyExchangeService currencyExchangeService;
 
-	@GetMapping("/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
+	@GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
 	public CurrencyConversionModel convertCurrency(@PathVariable String from,
 												  @PathVariable String to,
 												  @PathVariable BigDecimal quantity) {

@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 public class CurrencyConversionModel {
 	
-	private String from;
+	private String currencyFrom;
 	
-	private String to;
+	private String currencyTo;
 	
 	private BigDecimal conversionMultiple;
 	
@@ -19,27 +19,27 @@ public class CurrencyConversionModel {
 
 	public CurrencyConversionModel(String from, String to, BigDecimal conversionMultiple, BigDecimal quantity,
 			BigDecimal totalCalculateAmount) {
-		this.from = from;
-		this.to = to;
+		this.currencyFrom = from;
+		this.currencyTo = to;
 		this.conversionMultiple = conversionMultiple;
 		this.quantity = quantity;
 		this.totalCalculateAmount = totalCalculateAmount;
 	}
 
-	public String getFrom() {
-		return from;
+	public String getCurrencyFrom() {
+		return currencyFrom;
 	}
 
-	public void setFrom(String from) {
-		this.from = from;
+	public void setCurrencyFrom(String from) {
+		this.currencyFrom = from;
 	}
 
-	public String getTo() {
-		return to;
+	public String getCurrencyTo() {
+		return currencyTo;
 	}
 
-	public void setTo(String to) {
-		this.to = to;
+	public void setCurrencyTo(String to) {
+		this.currencyTo = to;
 	}
 
 	public BigDecimal getConversionMultiple() {
