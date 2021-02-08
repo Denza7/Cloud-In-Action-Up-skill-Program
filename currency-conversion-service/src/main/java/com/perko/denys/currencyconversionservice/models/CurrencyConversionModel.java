@@ -2,16 +2,24 @@ package com.perko.denys.currencyconversionservice.models;
 
 import java.math.BigDecimal;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 public class CurrencyConversionModel {
 	
+	@ApiModelProperty(notes = "Currency conversion from", example = "USD")
 	private String currencyFrom;
 	
+	@ApiModelProperty(notes = "Currency conversion to", example = "INR")
 	private String currencyTo;
 	
+	@ApiModelProperty(notes = "Rate", example = "55")
 	private BigDecimal conversionMultiple;
 	
+	@ApiModelProperty(notes = "Amount of money to be converted", example = "100")
 	private BigDecimal quantity;
 	
+	@ApiModelProperty(notes = "Conversion result", example = "5500")
 	private BigDecimal totalCalculateAmount;
 	
 	public CurrencyConversionModel() {

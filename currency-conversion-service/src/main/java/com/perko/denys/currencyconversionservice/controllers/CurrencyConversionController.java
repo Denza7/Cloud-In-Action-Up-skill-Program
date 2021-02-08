@@ -19,6 +19,8 @@ import com.perko.denys.currencyconversionservice.dto.CurrencyConversionDto;
 import com.perko.denys.currencyconversionservice.models.CurrencyConversionModel;
 import com.perko.denys.currencyconversionservice.services.CurrencyExchangeService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 public class CurrencyConversionController {
 
@@ -28,9 +30,11 @@ public class CurrencyConversionController {
 	private CurrencyExchangeService currencyExchangeService;
 
 	@GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
+	@ApiOperation(value = "Currency conversion",
+				  response = CurrencyConversionModel.class)
 	public CurrencyConversionModel convertCurrency(@PathVariable String from,
-												  @PathVariable String to,
-												  @PathVariable BigDecimal quantity) {
+												   @PathVariable String to,
+												   @PathVariable BigDecimal quantity) {
 		ModelMapper modelMapper= new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		CurrencyConversionDto response = currencyExchangeService.retrieveExchangeValue(new CurrencyConversionDto(from, to, null, quantity, null));
