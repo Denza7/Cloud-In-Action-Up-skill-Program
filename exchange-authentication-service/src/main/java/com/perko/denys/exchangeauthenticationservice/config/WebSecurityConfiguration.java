@@ -1,7 +1,9 @@
 package com.perko.denys.exchangeauthenticationservice.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +19,9 @@ import com.perko.denys.exchangeauthenticationservice.filters.JwtUsernamePassword
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
+	
+	@Autowired
+	private Environment environment;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -24,7 +29,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 				.csrf().disable()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
-				.addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager()))
+				.addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), environment.getProperty("token.secret")))
 				.authorizeRequests()
 				.anyRequest()
 				.authenticated()
@@ -38,7 +43,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 			 User.withDefaultPasswordEncoder()
 				.username("test")
 				.password("test")
-				.roles("USER")
+				.roles("ADMIN")
 				.build();
 
 		return new InMemoryUserDetailsManager(user);

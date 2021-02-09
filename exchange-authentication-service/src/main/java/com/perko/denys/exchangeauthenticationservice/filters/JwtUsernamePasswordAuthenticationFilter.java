@@ -12,6 +12,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,10 +29,17 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
+	private static final String AUTHORIZATION_HEADER = "Authorization";
+	
+	private static final String BEARER = "Bearer ";
+	
 	private AuthenticationManager authenticationManager;
 	
-	public JwtUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
+	private String secretKey;
+	
+	public JwtUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager, String secretKey) {
 		this.authenticationManager = authenticationManager;
+		this.secretKey = secretKey;
 	}
 
 	@Override
@@ -58,14 +67,14 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
 				.setSubject(username)
 				.setIssuedAt(new Date())
 				.setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(2L)))
-				.signWith(SignatureAlgorithm.HS512, "secrete_key")
+				.signWith(SignatureAlgorithm.HS512, secretKey)
 				.compact();
-		response.addHeader("Authorization", "Bearer " + token);
+		response.addHeader(AUTHORIZATION_HEADER, BEARER + token);
 		//refreshToken(response, token);
 	}
 	
 	private void refreshToken(HttpServletResponse response, String token) {
-	   Cookie refreshTokenCookie = new Cookie("Authorization", token);
+	   Cookie refreshTokenCookie = new Cookie(AUTHORIZATION_HEADER, token);
 	   refreshTokenCookie.setHttpOnly(true);
 	   //refreshTokenCookie.setSecure(true); //only allows HTTPS
 	   refreshTokenCookie.setPath("/");

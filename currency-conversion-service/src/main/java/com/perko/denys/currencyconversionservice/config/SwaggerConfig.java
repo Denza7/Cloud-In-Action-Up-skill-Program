@@ -2,8 +2,10 @@ package com.perko.denys.currencyconversionservice.config;
 
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -16,6 +18,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 public class SwaggerConfig {
 	
+	@Autowired
+	private Environment environment;
+	
 	@Bean
 	public Docket swaggerConfiguration() {
 		return new Docket(DocumentationType.SWAGGER_2)
@@ -27,13 +32,15 @@ public class SwaggerConfig {
 
 	private ApiInfo apiDetails() {
 		return new ApiInfo(
-				"Currency conversion API",
-				"Sample API for skill up course",
-				"1.0",
-				"Free to use",
-				new Contact("Perko Denys", "denisperko57@gmail.com", "denisperko57@gmail.com"),
-				"API License",
-				"denisperko57@gmail.com",
+				environment.getProperty("swagger.info.title"),
+				environment.getProperty("swagger.info.description"),
+				environment.getProperty("swagger.info.version"),
+				environment.getProperty("swagger.info.termsOfServiceUrl"),
+				new Contact(environment.getProperty("swagger.info.contact.name"),
+							environment.getProperty("swagger.info.contact.url"),
+							environment.getProperty("swagger.info.contact.email")),
+				environment.getProperty("swagger.info.license"),
+				environment.getProperty("swagger.info.licenseUrl"),
 				Collections.emptyList());
 	}
 

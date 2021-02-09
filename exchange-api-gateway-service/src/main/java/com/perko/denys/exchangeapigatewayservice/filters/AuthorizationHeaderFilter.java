@@ -1,7 +1,9 @@
 package com.perko.denys.exchangeapigatewayservice.filters;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -15,6 +17,13 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
+	
+	private static final String AUTHORIZATION_HEADER = "Authorization";
+	
+	private static final String BEARER = "Bearer ";
+	
+	@Autowired
+	private Environment environment;
 
 	public AuthorizationHeaderFilter() {
 		super(Config.class);
@@ -30,37 +39,37 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 			
 			ServerHttpRequest request = exchange.getRequest();
 			if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-				return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED);
+				return onError(exchange, HttpStatus.UNAUTHORIZED);
 			}
 			
-			String authorizationHeader = request.getHeaders().get("Authorization").get(0);
-			String jwt = authorizationHeader.replace("Bearer", "");
+			String authorizationHeader = request.getHeaders().get(AUTHORIZATION_HEADER).get(0);
+			String jwt = authorizationHeader.replace(BEARER, "");
 			
 			if (!isValidToken(jwt)) {
-				return onError(exchange, "JWT TOKEN is not valid", HttpStatus.UNAUTHORIZED);
+				return onError(exchange, HttpStatus.UNAUTHORIZED);
 			}
 			
 			return chain.filter(exchange);
 		};
 	}
 
-	private Mono<Void> onError(ServerWebExchange exchange, String string, HttpStatus unauthorized) {
+	private Mono<Void> onError(ServerWebExchange exchange, HttpStatus unauthorized) {
 		ServerHttpResponse response = exchange.getResponse();
 		response.setStatusCode(unauthorized);
 		return response.setComplete();
 	}
 	
 	private boolean isValidToken(String jwt) {
-		boolean result = true;
-		String subject = Jwts.parser().setSigningKey("secrete_key")
-		.parseClaimsJws(jwt)
-		.getBody()
-		.getSubject();
-		if (subject == null || subject.isEmpty()) {
-			result = false;
+		String subject = null;
+		try {
+			subject = Jwts.parser().setSigningKey(environment.getProperty("token.secret"))
+					.parseClaimsJws(jwt)
+					.getBody()
+					.getSubject();
+		} catch (Exception e) {
+			return false;
 		}
-		
-		return result;
+		return subject != null ? true : false;
 	}
 	
 }
