@@ -1,0 +1,53 @@
+version: '3.7'
+
+services:
+    exchange-authentication-service:
+        image: denzadocker7/auth1
+        mem_limit: 700m
+        ports:
+            - "8100:8100"
+        depends_on:
+            - exchange-discovery-service
+        environment:
+           EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://exchange-discovery-service:8761/eureka
+        links:
+           - exchange-discovery-service
+           
+    currency-exchange-service:
+        image: denzadocker7/currency-exchange-service
+        ports:
+            - "8000:8000"
+        depends_on:
+            - exchange-discovery-service
+        environment:
+           EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://exchange-discovery-service:8761/eureka
+        links:
+           - exchange-discovery-service
+
+    currency-conversion-service:
+        image: denzadocker7/currency-conversion-server
+        ports:
+            - "8200:8200"
+        depends_on:
+            - currency-exchange-service
+        environment:
+           EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://exchange-discovery-service:8761/eureka
+        links:
+           - exchange-discovery-service  
+
+    exchange-api-gateway-service:
+        image: denzadocker7/exchange-api-gateway-service
+        ports:
+            - "8765:8765"
+        depends_on:
+            - currency-conversion-service
+        environment:
+           EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://exchange-discovery-service:8761/eureka
+        links:
+           - exchange-discovery-service             
+    
+    exchange-discovery-service:
+        image: denzadocker7/discovery-server
+        mem_limit: 700m
+        ports: 
+            - "8761:8761"  
