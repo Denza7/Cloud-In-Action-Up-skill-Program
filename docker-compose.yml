@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
     exchange-authentication-service:
-        image: denzadocker7/auth1
+        image: denzadocker7/exchange-authentication-service
         mem_limit: 700m
         ports:
             - "8100:8100"

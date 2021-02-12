@@ -1,7 +1,5 @@
 package com.perko.denys.currencyconversionservice.services.impl;
 
-import java.math.BigDecimal;
-
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -13,7 +11,6 @@ import com.perko.denys.currencyconversionservice.dto.CurrencyConversionDto;
 import com.perko.denys.currencyconversionservice.entity.CurrencyConversion;
 import com.perko.denys.currencyconversionservice.exceptions.CurrencyExchangeException;
 import com.perko.denys.currencyconversionservice.feignclients.CurrencyExchangeClient;
-import com.perko.denys.currencyconversionservice.models.CurrencyConversionModel;
 import com.perko.denys.currencyconversionservice.services.CurrencyExchangeService;
 
 @Service

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.perko.denys.currencyconversionservice.entity.CurrencyConversion;
 import com.perko.denys.currencyconversionservice.models.CurrencyConversionModel;
 
-@FeignClient(name = "currency-exchange-service", url = "localhost:8000")
+@FeignClient(name = "currency-exchange-service")
 public interface CurrencyExchangeClient {
 
 	@GetMapping("/currency-exchange/form/{from}/to/{to}")

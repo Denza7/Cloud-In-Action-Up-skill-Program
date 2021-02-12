@@ -5,6 +5,6 @@ import com.perko.denys.currencyexchangeservice.entity.ExchangeValue;
 
 public interface CurrencyExchangeService {
 
-	ExchangeValueDto findRateByFromAndTo(ExchangeValueDto exchangeValueDto);
+	ExchangeValueDto findRateByFromAndToOrNull(ExchangeValueDto exchangeValueDto);
 
 }

@@ -3,6 +3,7 @@ package com.perko.denys.currencyexchangeservice.repositories;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -23,11 +24,11 @@ public class ExchangeValueRepositories {
 		exchangeValueList.add(new ExchangeValue(4L, "USD", "INR", new BigDecimal(95)));
 	}
 
-	public ExchangeValue findByFromAndTo(String currencyFrom, String currencyTo) {
+	public Optional<ExchangeValue> findByFromAndTo(String currencyFrom, String currencyTo) {
 		return exchangeValueList.stream().filter(exchangeValue -> 
 							exchangeValue.getCurrencyFrom().equals(currencyFrom) &&
 							exchangeValue.getCurrencyTo().equals(currencyTo)
-				            ).findFirst().get();
+				            ).findFirst();
 	}
 
 }

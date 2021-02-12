@@ -2,12 +2,17 @@ package com.perko.denys.currencyexchangeservice.model;
 
 import java.math.BigDecimal;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class ExchangeValueModel {
 
+	@ApiModelProperty(notes = "Currency conversion from", example = "USD")
 	private String currencyFrom;
 	
+	@ApiModelProperty(notes = "Currency conversion to", example = "INR")
 	private String currencyTo;
 	
+	@ApiModelProperty(notes = "Rate", example = "55")
 	private BigDecimal conversionMultiple;
 	
 	public ExchangeValueModel() {

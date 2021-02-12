@@ -1,5 +1,7 @@
 package com.perko.denys.currencyexchangeservice.services.impl;
 
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,11 @@ public class CurrencyExchangeServiceImpl implements CurrencyExchangeService {
 	private ExchangeValueRepositories exchangeValueRepositories;
 	
 	@Override
-	public ExchangeValueDto findRateByFromAndTo(ExchangeValueDto exchangeValueDto) {
+	public ExchangeValueDto findRateByFromAndToOrNull(ExchangeValueDto exchangeValueDto) {
 		ModelMapper modelMapper= new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		ExchangeValue exchangeValue = exchangeValueRepositories.findByFromAndTo(exchangeValueDto.getCurrencyFrom(), exchangeValueDto.getCurrencyTo());
-		return modelMapper.map(exchangeValue, ExchangeValueDto.class);
+		Optional<ExchangeValue> exchangeValue = exchangeValueRepositories.findByFromAndTo(exchangeValueDto.getCurrencyFrom(), exchangeValueDto.getCurrencyTo());
+		return exchangeValue.isPresent() ? modelMapper.map(exchangeValue.get(), ExchangeValueDto.class) : null;
 	}
 
 }

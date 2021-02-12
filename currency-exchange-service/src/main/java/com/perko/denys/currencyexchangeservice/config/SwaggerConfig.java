@@ -1,11 +1,10 @@
-package com.perko.denys.currencyconversionservice.config;
+package com.perko.denys.currencyexchangeservice.config;
 
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -17,7 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Configuration
 public class SwaggerConfig {
-	
+
 	@Autowired
 	private SwaggerConfigProperties swaggerProperties;
 	
@@ -25,7 +24,7 @@ public class SwaggerConfig {
 	public Docket swaggerConfiguration() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.perko.denys.currencyconversionservice"))
+				.apis(RequestHandlerSelectors.basePackage("com.perko.denys.currencyexchangeservice"))
 				.build()
 				.apiInfo(apiDetails());
 	}
@@ -43,5 +42,5 @@ public class SwaggerConfig {
 				swaggerProperties.getLicenseUrl(),
 				Collections.emptyList());
 	}
-
+	
 }

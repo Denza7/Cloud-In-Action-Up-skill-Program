@@ -1,6 +1,7 @@
 package com.perko.denys.exchangeauthenticationservice.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -20,8 +21,8 @@ import com.perko.denys.exchangeauthenticationservice.filters.JwtUsernamePassword
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
-	@Autowired
-	private Environment environment;
+	@Value("${token.secret}")
+	private String tokenSecret;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -29,7 +30,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 				.csrf().disable()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
-				.addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), environment.getProperty("token.secret")))
+				.addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), tokenSecret))
 				.authorizeRequests()
 				.anyRequest()
 				.authenticated()
