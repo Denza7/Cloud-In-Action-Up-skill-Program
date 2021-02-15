@@ -27,6 +27,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("currency-converter")
 public class CurrencyConversionController {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private CurrencyExchangeService currencyExchangeService;
